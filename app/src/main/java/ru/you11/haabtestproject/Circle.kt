@@ -5,14 +5,17 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.math.*
 
 class Circle : View {
 
     var angle = 0.0
+    var isMoving = false
 
-    private val parentWidth by lazy { (parent as View).width  }
-    private val parentHeight by lazy { (parent as View).height  }
+    private val parentWidth by lazy { (parent as View).width }
+    private val parentHeight by lazy { (parent as View).height }
 
     constructor(context: Context) : super(context)
 
@@ -25,8 +28,7 @@ class Circle : View {
         setBackgroundResource(R.drawable.circle_shape)
     }
 
-    fun setMoving(stepDistance: Float) {
-
+    fun moveCircle(stepDistance: Float) {
         var xDist = getXDist(stepDistance)
         var yDist = getYDist(stepDistance)
 
@@ -47,11 +49,11 @@ class Circle : View {
         x += xDist
         y += yDist
 
-        log("angle: $angle")
-        log("cos: ${cos(Math.toRadians(angle))}")
-        log("sin: ${sin(Math.toRadians(angle))}")
-        log("x dist: $xDist")
-        log("y dist: $yDist")
+//        log("angle: $angle")
+//        log("cos: ${cos(Math.toRadians(angle))}")
+//        log("sin: ${sin(Math.toRadians(angle))}")
+//        log("x dist: $xDist")
+//        log("y dist: $yDist")
 
         invalidate()
     }
