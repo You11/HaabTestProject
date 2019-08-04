@@ -17,12 +17,26 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         setContentView(R.layout.activity_main)
 
         firstCircle.angle = 120.0
+        secondCircle.angle = 300.0
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         firstCircle.setOnClickListener {
-            launch(Dispatchers.IO) {
-                while (true) {
-                    runOnUiThread { firstCircle.moveCircle(25f) }
-                    delay(25)
-                }
+            moveCircle(firstCircle)
+        }
+
+        secondCircle.setOnClickListener {
+            moveCircle(secondCircle)
+        }
+    }
+
+    private fun moveCircle(circle: Circle) {
+        launch(Dispatchers.IO) {
+            while (true) {
+                runOnUiThread { circle.moveCircle(25f) }
+                delay(25)
             }
         }
     }

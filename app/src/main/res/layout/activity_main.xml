@@ -14,4 +14,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ru.you11.haabtestproject.Circle
+        android:id="@+id/secondCircle"
+        android:layout_width="@dimen/secondCircleWidth"
+        android:layout_height="@dimen/secondCircleWidth"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
