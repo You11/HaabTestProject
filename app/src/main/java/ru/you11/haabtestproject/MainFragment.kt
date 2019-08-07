@@ -1,12 +1,11 @@
 package ru.you11.haabtestproject
 
+import android.graphics.Point
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -17,8 +16,7 @@ class MainFragment : Fragment(), CoroutineScope, MainContract.View {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
-        get() = Job()
-
+        get() = job
     lateinit var presenter: MainContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,25 +30,42 @@ class MainFragment : Fragment(), CoroutineScope, MainContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        firstCircle.angle = 120.0
-        secondCircle.angle = 300.0
-
         view.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                moveCircle(firstCircle)
-                moveCircle(secondCircle)
+                val firstParams = CircleParams(firstCircle, 20.0f)
+                val secondParams = CircleParams(secondCircle, 40.0f)
+
+                firstCircle.circleParams = firstParams
+                secondCircle.circleParams = secondParams
+
+                presenter.setCircleParams(firstParams, secondParams)
+                presenter.setCircleParentViewData(Point(rootLayout.width, rootLayout.height))
+
+                launch(Dispatchers.IO) {
+                    while (true) {
+                        val newParams = presenter.getNewParams()
+                        val circleViews = ArrayList<CircleView>()
+                        circleViews.add(firstCircle)
+                        circleViews.add(secondCircle)
+                        newParams.forEach { param ->
+                            circleViews.forEach { view ->
+                                if (param.id == view.id) {
+                                    view.circleParams = param
+                                }
+                            }
+                        }
+                        activity?.runOnUiThread {
+                            circleViews.forEach {
+                                it.move()
+                            }
+                        }
+                        delay(25)
+                    }
+                }
+
                 view.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
-    }
-
-    private fun moveCircle(circle: Circle) {
-        launch(Dispatchers.IO) {
-            while (true) {
-                activity?.runOnUiThread { circle.moveCircle(25f) }
-                delay(25)
-            }
-        }
     }
 
     override fun onStop() {

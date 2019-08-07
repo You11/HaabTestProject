@@ -3,16 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootLayout"
     android:background="@color/backgroundColor">
 
-    <ru.you11.haabtestproject.Circle
+    <ru.you11.haabtestproject.CircleView
         android:id="@+id/firstCircle"
         android:layout_width="@dimen/firstCircleWidth"
         android:layout_height="@dimen/firstCircleWidth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ru.you11.haabtestproject.Circle
+    <ru.you11.haabtestproject.CircleView
         android:id="@+id/secondCircle"
         android:layout_width="@dimen/secondCircleWidth"
         android:layout_height="@dimen/secondCircleWidth"
